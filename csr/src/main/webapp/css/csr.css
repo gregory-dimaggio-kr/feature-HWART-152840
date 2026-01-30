@@ -1,0 +1,274 @@
+.reportTable {
+	width: 350px
+}
+
+.stateColumn {
+	width: 25%;
+}
+
+.dateColumn {
+	width: 30%;
+}
+
+.downloadColumn {
+	width: 40%;
+}
+
+.reportViewer {
+	overflow-x: hidden;
+	overflow-y: auto
+}
+
+.latestReportsViewer {
+	width: 350px;
+	height: 100px;
+}
+
+.archivedReportsViewer {
+	width: 350px;
+	height: 175px;
+	border: 1px solid black
+}
+
+.viewer {
+	border: 1px solid black
+}
+
+.normalRow {
+	background-color: #ffffff;	
+}
+
+.highlightedRow {
+	background-color: #00ffff;	
+}
+
+.selectedRow {
+	background-color: #00ffbb;	
+}
+
+.rxExtractView input {
+	size: 30;
+}
+
+.changed {
+	background-color: #FF6633;
+	color: #FFFFFF
+}
+
+.selectedColumn {
+	width: 4%;	
+}
+
+.contactNameColumn {
+	width: 25%;
+	text-align: center;
+}
+
+.contactPhoneColumn {
+	width: 16%;
+	text-align: center;
+}
+
+.contactEmailColumn {
+	width: 20%;
+	text-align: center;
+}
+
+.contactCommentsColumn {
+	width: 35%;
+	text-align: center;
+}
+
+.reportGenerationDateColumn {
+	width: 30%;
+	text-align: center;
+}
+
+.reportSubmissionDateColumn {
+	width: 30%;
+	text-align: center;
+}
+
+.reportFilenameColumn {
+	width: 20%;
+	text-align: center;
+}
+
+.reportRecordsColumn {
+	width: 13%;
+	text-align: center;
+}
+
+.rxStateColumn {
+	width: 15%;
+	text-align: center;
+}
+
+.rxNumberColumn {
+	width: 15%;
+	text-align: center;
+}
+
+.rxFacilityColumn {
+	width: 8%;
+	text-align: center;
+}
+
+.rxDispenseDateColumn {
+	width: 20%;
+	text-align: center;
+}
+
+.rxRefillColumn {
+	width: 8%;
+	text-align: center;
+}
+
+.rxNameColumn {
+	width: 30%;
+	text-align: center;
+}
+
+.stateNameColumn {
+	width: 15%;	
+	text-align: center;
+}
+
+.stateActiveColumn {
+	width: 5%;	
+	text-align: center;
+}
+
+.stateScheduleColumn {
+	width: 10%;	
+	text-align: center;
+}
+
+.stateFormatColumn {
+	width: 8%;	
+	text-align: center;
+}
+
+.stateMethodColumn {
+	width: 10%;	
+	text-align: center;
+}
+
+.stateWebLinkColumn {
+	width: 10%;	
+	text-align: center;
+}
+
+.stateContactsColumn {
+	width: 10%;	
+	text-align: center;
+}
+
+.stateReportColumn {
+	width: 25%;	
+	text-align: center;
+}
+
+.visibleDiv {
+	visibility: visible;
+}
+
+.hiddenDiv {
+	visibility: hidden;
+	height: 0px;
+}
+
+#stateView .sentReport a {
+	color: green;
+}
+
+#stateView .unsentReport a {
+	color: red;
+}
+
+.activeState {
+	color: green;
+	font-weight: bold;	
+}
+
+.inactiveState {
+	color: red;
+	font-weight: bold;	
+}
+
+.balloon {
+	position: absolute;
+	visibility: hidden;
+	border: 2px solid black;
+}
+
+.openBalloon {
+	position: absolute;
+	visibility: visible;
+	border: 2px solid black;
+}
+
+input[type="checkbox"], input[type="radio"]{
+   background: transparent;
+   border: 0;
+}
+
+.inactiveTab {
+
+}
+
+.activeTab {
+	background-color: white;
+	color: red;
+}
+
+.legend {
+	border: 1px solid black;
+	text-align: center;
+}
+
+.loadingPane {
+	color: red;
+}
+
+.reportDetailLabel {
+	border: 1px solid black;
+	font-weight: bold;
+	padding: 2px;
+	padding-right: 5px;
+}
+
+.reportDetailValue {
+	border: 1px solid black;
+	padding: 2px;
+}
+
+caption {
+	color: blue;
+	font-weight: bold;
+}
+
+table {
+  border-collapse:collapse;
+}
+
+table tbody tr td {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+table tbody tr th {
+  border: none;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.actionButtons {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.noteText {
+	color: red;
+	font-weight: bolder;
+}

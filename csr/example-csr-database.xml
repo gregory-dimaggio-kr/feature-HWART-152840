@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Database Tasks" default="help" basedir=".">
+
+        <!-- Help information -->
+        <target name="help" description="Help">
+                <echo message="" />
+                <echo message="This ant script contains tasks pertaining to" />
+                <echo message="to the Derby database." />
+                <echo message="" />
+                <echo message="Defined targets:" />
+                <echo message="" />
+                <echo message="  initialize-example-databases" />
+                <echo message="" />
+                <echo message="  test-db-create" />
+                <echo message="  test-db-destroy" />
+                <echo message="" />
+                <echo message="  server-db-create" />
+                <echo message="  server-db-destroy" />
+                <echo message="  server-db-start" />
+                <echo message="  server-db-stop" />
+                <echo message="" />
+                <echo message="  enable-derby-database-for-jboss" />
+                <echo message="  disable-derby-database-for-jboss" />
+                <echo message="" />
+        </target>
+
+        <!-- Override properties is provided to support the automated build      -->
+        <!-- scripts. Do NOT check this file into Source Control because scripts -->
+        <!-- can be built to create this file on the fly                         -->
+        <property file="override.properties" />
+
+        <!-- Properties and Classpaths -->
+        <property name="db.name" value="csr" />
+        <property name="db.server" value="localhost" />
+        <property name="db.port" value="1527" />
+        <property name="db.username" value="APP" />
+        <property name="db.password" value="APP" />
+
+        <property name="server.db.driver" value="org.apache.derby.jdbc.ClientDriver" />
+        <property name="server.db.url" value="jdbc:derby://${db.server}:${db.port}/${db.name};create=true" />
+
+        <property name="test.db.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+        <property name="test.db.url" value="jdbc:derby:database/${db.name}-test;create=true" />
+
+        <property name="M2_REPO" value="${user.home}/.m2/repository" />
+
+		<property environment="env"/>
+		<property name="jboss.home" value="${env.JBOSS_HOME}" />
+        <!-- <property name="jboss.home" value="C:/jboss-4.0.3SP1" /> -->
+
+        <path id="database.classpath">
+                <fileset dir="${M2_REPO}/org/apache/derby">
+                        <include name="**/10.6.1.0/*.jar" />
+                </fileset>
+        </path>
+	
+	    <!-- ================================================================== -->
+        <!-- Initial target to be run once immediately after creating a new 
+	     Kroger java web application project. -->
+	    <target name="initialize-example-databases" description="Initial target to be run once immediately after creating a new Kroger Java Web Application project.">
+	    	<antcall target="enable-derby-database-for-jboss" />
+	    	<antcall target="test-db-create" />
+            <antcall target="server-db-create" />
+            <antcall target="server-db-start" />
+	    </target>
+
+        <!-- ================================================================== -->
+        <!-- Create the database -->
+        <target name="test-db-create" description="Create test database directory" unless="test.db.already.created">
+                <antcall target="test-db-destroy" />
+                <mkdir dir="database" />
+                <copy tofile="database/file.sql" file="src/test/resources/csr.ddl" />
+                <antcall target="test-db-runfile" />
+        </target>
+
+        <!-- ================================================================== -->
+        <!-- Drop the database (delete all the files) -->
+        <target name="test-db-destroy" description="Drop the test database">
+                <delete dir="database/${db.name}-test" quiet="true" />
+        </target>
+
+        <!-- ================================================================== -->
+        <!-- Run statements from a file -->
+        <target name="test-db-runfile" description="Run a file on test database">
+                <sql driver="${test.db.driver}" url="${test.db.url}" userid="${db.username}" password="${db.password}" onerror="continue">
+                        <classpath refid="database.classpath" />
+                        <transaction src="database/file.sql" />
+                </sql>
+        </target>
+
+        <!-- ================================================================== -->
+        <!-- Create the database -->
+        <target name="server-db-create" description="Create server database directory" depends="server-db-destroy">
+                <mkdir dir="database" />
+                <copy tofile="database/file.sql" file="src/test/resources/csr.ddl" />
+                <sql driver="${test.db.driver}" url="jdbc:derby:database/${db.name};create=true" userid="${db.username}" password="${db.password}" onerror="continue">
+                        <classpath refid="database.classpath" />
+                        <transaction src="database/file.sql" />
+                </sql>
+        </target>
+
+        <!-- ================================================================== -->
+        <!-- Drop the database (delete all the files) -->
+        <target name="server-db-destroy" description="Drop the server database" depends="server-db-stop">
+                <delete dir="database/${db.name}" quiet="true" />
+        </target>
+
+        <!-- ================================================================== -->
+        <target name="server-db-start" description="Start the server database">
+                <java classname="org.apache.derby.drda.NetworkServerControl" fork="true" spawn="true" dir="database">
+                        <classpath refid="database.classpath" />
+                        <arg value="start" />
+                        <arg value="-h" />
+                        <arg value="${db.server}" />
+                        <arg value="-p" />
+                        <arg value="${db.port}" />
+                		<arg value="-noSecurityManager" />
+                </java>
+        </target>
+
+        <!-- ================================================================== -->
+        <target name="server-db-stop" description="Stop the server database">
+                <java classname="org.apache.derby.drda.NetworkServerControl" fork="true" spawn="true" dir="database">
+                        <classpath refid="database.classpath" />
+                        <arg value="shutdown" />
+                        <arg value="-h" />
+                        <arg value="${db.server}" />
+                        <arg value="-p" />
+                        <arg value="${db.port}" />
+                		<arg value="-noSecurityManager" />
+                </java>
+        </target>
+
+        <!-- ================================================================== -->
+        <!-- Run statements from a file -->
+        <target name="server-db-runfile" description="Run a file on server database">
+                <sql driver="${server.db.driver}" url="${server.db.url}" userid="${db.username}" password="${db.password}" onerror="continue">
+                        <classpath refid="database.classpath" />
+                        <transaction src="database/file.sql" />
+                </sql>
+        </target>
+
+        <!-- ================================================================== -->
+        <target name="enable-derby-database-for-jboss" description="Setup JBoss to use Derby">
+                <fail message="Required 'jboss.home' property is not set!" unless="jboss.home" />
+                <!--  Copy drivers to JBoss -->
+                <copy todir="${jboss.home}/server/default/lib">
+                        <fileset dir="${M2_REPO}/org/apache/derby">
+                                <include name="**/10.6.1.0/*.jar" />
+                        </fileset>
+                        <mapper type="flatten" />
+                </copy>
+
+                <!--  Create new datasource file -->
+                <delete file="${jboss.home}/server/default/deploy/csr-ds.xml" quiet="true" />
+                <!-- CAREFUL ON THE NEXT LINE - DON'T ALLOW A NEWLINE BEFORE THE CDATA! -->
+                <concat destfile="${jboss.home}/server/default/deploy/csr-ds.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+        <!-- Test Derby -->
+        <local-tx-datasource>
+                <jndi-name>jdbc/csrDataSource</jndi-name>
+                <connection-url>${server.db.url}</connection-url>
+                <driver-class>${server.db.driver}</driver-class>
+                <user-name>${db.username}</user-name>
+                <password>${db.password}</password>
+                <min-pool-size>5</min-pool-size>
+                <max-pool-size>20</max-pool-size>
+                <idle-timeout-minutes>5</idle-timeout-minutes>
+                <track-statements/>
+        </local-tx-datasource>
+</datasources>
+]]>
+                </concat>
+        </target>
+
+        <!-- ================================================================== -->
+        <target name="disable-derby-database-for-jboss" description="Setup JBoss to not use Derby">
+                <fail message="Required 'jboss.home' property is not set!" unless="jboss.home" />
+                <!--  Create new datasource file -->
+                <delete file="${jboss.home}/server/default/deploy/csr-ds.xml" quiet="true" />
+        </target>
+</project>

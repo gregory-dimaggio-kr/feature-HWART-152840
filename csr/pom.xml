@@ -1,0 +1,285 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.kroger.pharmacy</groupId>
+	<artifactId>csr</artifactId>
+	<packaging>war</packaging>
+	<version>2.3.1-SNAPSHOT</version>
+	<name>csr</name>
+	<url>http://confluence.kroger.com/</url>
+	<description>csr</description>
+	<!-- ================================================ -->
+	<parent>
+		<groupId>com.kroger.commons</groupId>
+		<artifactId>kroger-project-pom</artifactId>
+		<version>2.5.4</version>
+	</parent>
+
+	<properties>
+	    <java.version>1.8</java.version>
+	</properties>
+
+	<!-- ================================================ -->
+	<issueManagement>
+		<system>jira</system>
+		<url>http://ssjira.kroger.com/jira</url>
+	</issueManagement>
+	<ciManagement>
+		<system>TeamCity</system>
+		<url>http://teamcity.kroger.com/</url>
+	</ciManagement>
+	<!-- ================================================ -->
+	<scm>
+		<connection>
+			scm:svn|ext|svn.kroger.com|/repos/eprn/trunk/Data%20Warehouse/EAF/csr</connection>
+		<developerConnection>
+			scm:svn|ext|svn.kroger.com|/repos/eprn/trunk/Data%20Warehouse/EAF/csr</developerConnection>
+	</scm>
+	<!-- ================================================ -->
+	<developers>
+		<developer>
+			<name>Java Developer</name>
+			<email>java.developer@kroger.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<organization>Kroger</organization>
+		</developer>
+	</developers>
+	<!-- ================================================ -->
+	<dependencies>
+		<!-- Kroger Commons Dependencies -->
+		<!-- OpenJPA Dependency (provided by container)-->
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-jpa${jpa.api.version}-pom</artifactId>
+			<version>${kroger.jpa.pom.version}</version>
+			<type>pom</type>
+		</dependency>
+		<!--  <dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-openjpa-pom</artifactId>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency> -->
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-spring-pom</artifactId>
+			<!-- <version>${kroger.spring.pom.version}</version> -->
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-aop-pom</artifactId>
+			<!-- <version>${kroger.aop.pom.version}</version> -->
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-stripes-pom</artifactId>
+			<!-- <version>${kroger.stripes.pom.version}</version> -->
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>taglibs</groupId>
+					<artifactId>standard</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-impl</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-core</artifactId>
+			<!-- <version>${kroger.core.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-util</artifactId>
+			<!-- <version>${kroger.util.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-security</artifactId>
+			<!-- <version>${kroger.security.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-ldap</artifactId>
+			<!-- <version>${kroger.ldap.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-logging</artifactId>
+			<!-- <version>${kroger.logging.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-calendar</artifactId>
+			<!-- <version>${kroger-calendar.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-json-pom</artifactId>
+			<!-- <version>${kroger.json.pom.version}</version> -->
+			<type>pom</type>
+		</dependency>
+		<!-- Testing Dependencies -->
+		<dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-test-pom</artifactId>
+			<!-- <version>${kroger.test.pom.version}</version> -->
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openqa.selenium.server</groupId>
+			<artifactId>selenium-server-coreless</artifactId>
+			<version>0.9.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Excluded Dependencies; provided by app server -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<!-- <version>2.5</version> -->
+			<scope>provided</scope>
+		</dependency>
+		<!-- Logging Dependency -->
+		<!-- <dependency>
+			<groupId>com.kroger.commons</groupId>
+			<artifactId>kroger-logging</artifactId>
+		</dependency> -->
+		<dependency>
+			<groupId>com.kroger.eprn.modules</groupId>
+			<artifactId>eprn-datawarehouse-rmi</artifactId>
+		</dependency>
+		<!-- Commons Logging Work-Around for WebSphere (websphere.profile) -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<scope>${commons.logging.scope.selector}</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.nimbusds/oauth2-oidc-sdk -->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>oauth2-oidc-sdk</artifactId>
+			<version>11.31.1</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons.logging.version}</version>
+			<classifier>${commons.logging.classifier.selector}</classifier>
+		</dependency> -->
+		<dependency>
+			<groupId>ojdbc</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>14_g</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-fileupload2-jakarta-servlet6</artifactId>
+			<version>2.0.0-M4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.11.0</version>
+		</dependency>
+	</dependencies>
+	<!-- ================================================ -->
+	<repositories>
+	</repositories>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.kroger.eprn.modules</groupId>
+				<artifactId>eprn-datawarehouse-rmi</artifactId>
+				<version>25.18.00-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.kroger.commons</groupId>
+				<artifactId>kroger-logging-pom</artifactId>
+				<type>pom</type>
+				<version>3.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+				<version>1.4.14</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>1.4.14</version>
+			</dependency>
+			<dependency>
+				<groupId>com.nimbusds</groupId>
+				<artifactId>oauth2-oidc-sdk</artifactId>
+				<version>11.31.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.xmlgraphics</groupId>
+				<artifactId>batik-dom</artifactId>
+				<version>1.19</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.xmlgraphics</groupId>
+				<artifactId>batik-transcoder</artifactId>
+				<version>1.19</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.xmlgraphics</groupId>
+				<artifactId>batik-svggen</artifactId>
+				<version>1.19</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.xmlgraphics</groupId>
+				<artifactId>batik-util</artifactId>
+				<version>1.19</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.20.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <skipTests>true</skipTests>
+                    </configuration>
+                </plugin>    
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <PREFERENCE_VALUE APP_ID="1" USR_ID="ADMIN" NAM_TX="Color" VLU_TX="Blue"/>
+  <PREFERENCE_VALUE APP_ID="1" USR_ID="ADMIN" NAM_TX="Theme" VLU_TX="Default"/>
+  <PREFERENCE_VALUE APP_ID="1" USR_ID="APPDEV" NAM_TX="Theme" VLU_TX="Crazy"/>
+  <PREFERENCE_VALUE APP_ID="1" USR_ID="USER" NAM_TX="Color" VLU_TX="Red"/>
+  <PREFERENCE_VALUE APP_ID="1" USR_ID="USER" NAM_TX="Theme" VLU_TX="Default"/>
+</dataset>

@@ -1,0 +1,61 @@
+name: Deploy CSR Web Manager
+
+on:
+  workflow_dispatch:
+    inputs:
+      App_Version:
+        description: 'App Version to deploy'
+        required: true
+      Environment:
+       type: choice
+       description: 'Environment to deploy to'
+       options:
+       - test
+       - stage
+       - prod
+      CR:
+        description: 'Enter CR# for Prod Only'
+
+env:
+  APP_NAME: csr
+  FILE_NAME: csr-
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: [ aks ]
+    environment: ${{ github.event.inputs.Environment }}
+    steps:
+      - name: Deploy ${{ env.APP_NAME }} to ${{ github.event.inputs.Environment }}
+        if: ${{ github.event.inputs.Environment != 'prod' }}
+        uses: fjogeleit/http-request-action@v1
+        with:
+           url: 'https://aap.kroger.com/api/v2/job_templates/2185/launch/'
+           method: 'POST'
+           username: ${{ secrets.ANSIBLE_USERNAME }}
+           password: ${{ secrets.ANSIBLE_PASSWORD }}
+           data:
+             '{
+                "extra_vars" : {
+                "url": "/kroger-eprn-snapshot/com/kroger/pharmacy/${{ env.APP_NAME }}/${{ github.event.inputs.App_Version }}/${{ env.FILE_NAME }}${{ github.event.inputs.App_Version }}.war"
+                },
+                "limit": "${{ github.event.inputs.Environment }}",
+                "inventory": "${{ secrets.ANSIBLE_INVENTORY }}"
+              }'
+      - name: Deploy ${{ env.APP_NAME }} to Prod
+        if: ${{ github.event.inputs.Environment == 'prod' }}
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://aap.kroger.com/api/v2/workflow_job_templates/2246/launch/'
+          method: 'POST'
+          username: ${{ secrets.ANSIBLE_USERNAME }}
+          password: ${{ secrets.ANSIBLE_PASSWORD }}
+          data:
+            '{
+                "extra_vars" : {
+                "url": "/kroger-eprn-snapshot/com/kroger/pharmacy/${{ env.APP_NAME }}/${{ github.event.inputs.App_Version }}/${{ env.FILE_NAME }}${{ github.event.inputs.App_Version }}.war",
+                "snowcr": "${{ github.event.inputs.CR }}"
+                },
+                "limit": "${{ github.event.inputs.Environment }}",
+                "inventory": "${{ secrets.ANSIBLE_INVENTORY }}"
+              }'

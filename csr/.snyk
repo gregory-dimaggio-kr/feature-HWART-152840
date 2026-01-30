@@ -1,0 +1,32 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JAVA-ORGSPRINGFRAMEWORK-2436751:
+    - '*':
+        reason: Not Deployed on either Apache Tomcat Payara or Glassfish
+        expires: 2026-09-01T00:00:00.000Z
+        created: 2025-06-30T20:12:35.886Z
+  SNYK-JAVA-ORGSPRINGFRAMEWORKSECURITY-8309135:
+    - '*':
+        reason: Health and Wellness doesnt create WebFlux applications
+        expires: 2026-12-05T00:00:00.000Z
+        created: 2025-10-02T16:52:52.368Z
+  SNYK-JAVA-ORGSPRINGFRAMEWORKSECURITY-6457293:
+    - '*':
+        reason: No EPRN application is using AuthenticatedVoter.
+        expires: 2027-02-05T00:00:00.000Z
+        created: 2025-12-10T19:00:06.748Z
+  SNYK-JAVA-ORGSPRINGFRAMEWORK-12008931:
+    - '*':
+        reason: >-
+          only exploitable if the Servlet container does not reject suspicious
+          sequences
+        expires: 2026-09-05T00:00:00.000Z
+        created: 2025-08-20T16:31:06.251Z
+  SNYK-JAVA-ORGSPRINGFRAMEWORK-12817817:
+    - '*':
+        reason: EnableMethodSecurity feature is not enabled
+        expires: 2026-09-05T00:00:00.000Z
+        created: 2025-09-19T16:33:55.638Z
+patch: {}

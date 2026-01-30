@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns="http://www.springframework.org/schema/beans">
+	<!-- ===================== SITEMINDER AUTHENTICATION CONFIGURATION ALTERATIONS 
+		=================== <bean id="siteMinderDivisionHelper" class="com.kroger.commons.security.siteminder.SiteMinderDivisionHelper"> 
+		<property name="divisionRestrictionCheck"> <value>false</value> </property> 
+		<property name="additionalSupportedDivisions"> <list> <value>035</value> 
+		<value>055</value> <value>056</value> </list> </property> <property name="unsupportedDivisions"> 
+		<list> <value>090</value> </list> </property> <property name="additionalDivisionConversions"> 
+		<map> <entry key="796"> <value>706</value> </entry> </map> </property> <property 
+		name="removedDivisionConversions"> <list> <value>035</value> </list> </property> 
+		</bean> -->
+
+	<bean
+		class="com.kroger.commons.security.siteminder.SiteMinderAuthorizationProvider"
+		id="krogerAuthorizationProvider">
+		<property value="csr" name="applicationName" />
+		<property name="allowedRoleNames">
+			<list>
+				<value>sm-eprndw-.*</value>
+			</list>
+		</property>
+	</bean>
+	<!-- Authentication and Authorization Providers for Manager -->
+	<bean
+		class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider"
+		id="krogerAuthenticationProvider">
+
+		<property name="preAuthenticatedUserDetailsService">
+
+			<bean class="com.kroger.commons.security.KrogerAuthenticationProvider">
+				<property name="authorizationProvider" ref="krogerAuthorizationProvider" />
+				<property value="csr" name="applicationName" />
+				<property value="true" name="authenticationRoleIncluded" />
+				<property value="kroger-authenticated-user" name="authenticationRoleName" />
+
+				<property name="adminRoleNames">
+					<list>
+						<value>sm-eprndw-csradmin</value>
+					</list>
+				</property>
+
+				<property name="supportRoleNames">
+
+					<list>
+						<value>sm-eprndw-csradmin</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider
+			ref="krogerAuthenticationProvider" />
+	</security:authentication-manager>
+	<!-- Authentication Success Handler -->
+
+	<bean
+		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"
+		id="authenticationSuccessHandler">
+		<property value="/index.jsp" name="defaultTargetUrl" />
+	</bean>
+	<!-- Security Filters for SiteMinder and Spoofing -->
+
+	<bean
+		class="com.kroger.commons.security.siteminder.SiteMinderAuthenticationProcessingFilter"
+		id="siteMinderFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />
+	</bean>
+
+	<bean
+		class="com.kroger.commons.security.spoofing.SpoofingAuthenticationProcessingFilter"
+		id="spoofingFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+
+		<property name="target">
+			<ref bean="siteMinderFilter" />
+		</property>
+		<property value="kroger-security" name="authenticationResourceName" />
+		<property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />
+	</bean>
+
+	<bean
+		class="org.springframework.security.web.authentication.switchuser.SwitchUserFilter"
+		id="switchUserProcessingFilter">
+
+		<property name="userDetailsService">
+
+			<bean class="com.kroger.commons.security.KrogerLdapUserDetailsService">
+				<property name="authorizationProvider" ref="krogerAuthorizationProvider" />
+				<property name="workforceLdapTemplate" ref="workforceLdapTemplate" />
+				<property value="true" name="authenticationRoleIncluded" />
+				<property value="kroger-authenticated-user" name="authenticationRoleName" />
+				<property value="javaweb" name="applicationName" />
+			</bean>
+		</property>
+		
+		<property name="switchUserUrl">
+			<value>/j_spring_security_switch_user</value>
+		</property>
+		
+		<property name="exitUserUrl">
+			<value>/j_spring_security_exit_user</value>
+		</property>
+		
+		<property name="targetUrl">
+			<value>/index.jsp</value>
+		</property>
+	</bean>
+	<!-- Decision Manager and Role Voter -->
+	
+	<bean class="org.springframework.security.access.vote.AffirmativeBased"
+		id="accessDecisionManager">
+		
+		<property name="allowIfAllAbstainDecisions">
+			<value>false</value>
+		</property>
+		
+		<property name="decisionVoters">
+			
+			<list>
+				<ref local="roleVoter" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.security.access.vote.RoleVoter"
+		id="roleVoter">
+		
+		<property name="rolePrefix">
+			<value />
+		</property>
+	</bean>
+	<!-- Entry Point for Authentication -->
+	
+	<bean
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint"
+		id="authenticationProcessingFilterEntryPoint">
+		<property value="/view/public/login.jsp" name="loginFormUrl" />
+	</bean>
+	<security:global-method-security
+		pre-post-annotations="enabled" />
+	
+	<!--  <security:http lowercase-comparisons="true"
+		access-decision-manager-ref="accessDecisionManager" entry-point-ref="authenticationProcessingFilterEntryPoint"
+		auto-config="false">-->
+	<security:http access-decision-manager-ref="accessDecisionManager" entry-point-ref="authenticationProcessingFilterEntryPoint"
+		auto-config="false">
+		<security:custom-filter ref="siteMinderFilter"
+			position="PRE_AUTH_FILTER" />
+		<security:custom-filter ref="spoofingFilter"
+			after="PRE_AUTH_FILTER" />
+		<security:custom-filter ref="switchUserProcessingFilter"
+			position="LAST" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/css/**" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/js/**" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/images/**" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/view/public/login.jsp" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/view/public/logout.jsp" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/view/public/callback.jsp" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/view/public/error403.jsp" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/srj/**" />
+		<security:intercept-url access="ROLE_ANONYMOUS,kroger-authenticated-user"
+			pattern="/controller/api**" />
+		<security:intercept-url access="kroger-authenticated-user"
+			pattern="/**" />
+	</security:http>
+</beans>

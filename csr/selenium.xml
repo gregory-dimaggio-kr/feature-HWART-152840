@@ -1,0 +1,12 @@
+<project name="UA Testing" default="test-project">
+
+	<taskdef resource="selenium-ant.properties">
+		<classpath>
+			<pathelement location="${user.home}/.m2/repository/org/openqa/selenium/server/selenium-server-coreless/0.9.0/selenium-server-coreless-0.9.0.jar" />
+		</classpath>
+	</taskdef>
+	<target name="test-project">
+		<!-- <selenese suite="src/test/resources/selenium/test-suite.html" browser="*firefox" results="target/results.html" multiWindow="true" timeoutInSeconds="900" port="8888" startURL="http://localhost:8080" /> -->
+		<selenese suite="src/test/resources/selenium/test-suite.html" browser="*iexplore" results="target/results.html" multiWindow="true" timeoutInSeconds="900" port="8888" startURL="http://ssbuild.kroger.com:8888" />
+	</target>
+</project>

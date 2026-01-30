@@ -1,0 +1,19 @@
+name: Maven CI
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'develop'
+      - 'feature/**'
+      - 'dependabot/**'
+      - 'release/**'
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+jobs:
+  maven-ci:
+    uses: krogertechnology/hw-gha-maven-ci/.github/workflows/ru-maven-ci.yml@v1
+    secrets: inherit

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="37px" height="37px" viewBox="0 0 37 37" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>Group 8</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1920-x-1080-global-navigation--(Desktop)" transform="translate(-16.000000, -7.000000)" fill-rule="nonzero">
+            <g id="Group-9" transform="translate(16.000000, 7.000000)">
+                <g id="Group-8">
+                    <path d="M25.3,11.2 L25.3,7.1 C25.3,5.1 24.5,3.4 23.2,2.1 C21.9,0.8 20.2,3.55271368e-15 18.2,3.55271368e-15 C14.3,3.55271368e-15 11.1,3.2 11.1,7.1 L11.1,11.1 L7.1,11.1 C5.1,11.1 3.4,11.9 2.1,13.2 C0.8,14.5 9.9475983e-14,16.2 9.9475983e-14,18.2 C9.9475983e-14,22.1 3.2,25.3 7.1,25.3 L11.2,25.3 C11.6,17.7 17.7,11.6 25.3,11.2" id="Path" fill="#4579BD"></path>
+                    <path d="M29.3,11.2 L26,11.2 C25.8,11.2 25.5,11.2 25.3,11.2 L25.3,25.3 L11.2,25.3 C11.2,25.5 11.2,25.8 11.2,26 L11.2,29.3 C11.2,31.3 12,33 13.3,34.3 C14.6,35.6 16.4,36.4 18.5,36.4 C22.4,36.3 25.4,33.1 25.4,29.2 L25.4,25.3 L29.4,25.3 C33.3,25.3 36.5,22.1 36.5,18.2 C36.4,14.4 33.2,11.2 29.3,11.2" id="Path" fill="#8DC5E6"></path>
+                    <path d="M11.2,25.3 L25.3,25.3 L25.3,11.2 C17.7,11.6 11.6,17.7 11.2,25.3" id="Path" fill="#306897"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
