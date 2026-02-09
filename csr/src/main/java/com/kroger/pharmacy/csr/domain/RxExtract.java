@@ -52,6 +52,8 @@ public class RxExtract extends SelectableObject {
     private String directions;
     private String rxTriplicateSerialNumber;
     private String rxPaymentCode;
+    private String discountCardPrimary;
+    private String discountCardSecondary;
     private String productNdc;
     private String prescriberDeaNumber;
     private String prescriberDeaSuffix;
@@ -576,6 +578,32 @@ public class RxExtract extends SelectableObject {
 
     public void setRxPaymentCode(String rxPaymentCode) {
         this.rxPaymentCode = rxPaymentCode;
+    }
+
+    //DSP31
+    @Column(
+            name = "DISCOUNT_CARD_PRIMARY",
+            length = 1
+    )
+    public String getDiscountCardPrimary() {
+        return this.discountCardPrimary;
+    }
+
+    public void setDiscountCardPrimary(String discountCardPrimary) {
+        this.discountCardPrimary = discountCardPrimary;
+    }
+
+    //DSP33
+    @Column(
+            name = "DISCOUNT_CARD_SECONDARY",
+            length = 1
+    )
+    public String getDiscountCardSecondary() {
+        return this.discountCardSecondary;
+    }
+
+    public void setDiscountCardSecondary(String discountCardSecondary) {
+        this.discountCardSecondary = discountCardSecondary;
     }
 
     //DSP08

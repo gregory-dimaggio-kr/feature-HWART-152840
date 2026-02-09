@@ -187,6 +187,28 @@
 							</tr>
 							<tr>
 								<td>
+									<!-- DSP31 -->
+									<stripes:label for="rxExtract.discountCardPrimary">Discount Card</stripes:label>
+									<stripes:select name="rxExtract.discountCardPrimary">
+										<stripes:option value=""></stripes:option>
+										<stripes:option value="1">1 - yes</stripes:option>
+										<stripes:option value="2">2 - no</stripes:option>
+									</stripes:select>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<!-- DSP33 -->
+									<stripes:label for="rxExtract.discountCardSecondary">Discount Card for Additional Payment Type</stripes:label>
+									<stripes:select name="rxExtract.discountCardSecondary">
+										<stripes:option value=""></stripes:option>
+										<stripes:option value="1">1 - yes</stripes:option>
+										<stripes:option value="2">2 - no</stripes:option>
+									</stripes:select>
+								</td>
+							</tr>
+							<tr>
+								<td>
 								    <!-- AIR02 -->
 									<stripes:label for="rxExtract.rxTriplicateSerialNumber">State Issued Rx Serial Number</stripes:label>
 									<stripes:text name="rxExtract.rxTriplicateSerialNumber" onkeyup="convertToCaps(this);" onkeypress="return forceCaps(event);" onchange="trimField(this);" />
